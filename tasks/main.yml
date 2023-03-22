@@ -22,7 +22,7 @@
       src: "{{item}}"
     register: unit_files
     with_items:
-      - kiss-tnc.service
+      - kiss-tnc@.service
       - nrattach@.service
       - netromd.service
       - nodesave.service
