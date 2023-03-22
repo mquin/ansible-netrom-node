@@ -12,6 +12,8 @@ ax_25_ports:
     nr_def_qual: 203
     nr_worst_qual: 129
     nr_verbose: 1
+    type: kiss
+    tty: /dev/ttyACM0
 nr_ports:
   netrom:
     name: netrom
