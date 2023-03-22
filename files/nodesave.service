@@ -1,0 +1,13 @@
+[Unit]
+Description=Persist NET/ROM routing information
+After=network.target
+StartLimitInterval=0
+
+[Service]
+Type=oneshot
+ExecStart=bash -c '[ -x /etc/ax25/nodesave.sh ] && /etc/ax25/nodesave.sh; exit 0'
+ExecStop=bash -c 'nodesave > /etc/ax25/nodesave.sh && chmod 755 /etc/ax25/nodesave.sh'
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+

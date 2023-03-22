@@ -1,0 +1,5 @@
+# /etc/ax25/nrbroadcast
+# ax25_name min_obs def_qual worst_qual verbose
+{% for item in ax_25_ports %}
+{{ ax_25_ports[item].name }} {{ ax_25_ports[item].nr_min_obs }} {{ ax_25_ports[item].nr_def_qual }} {{ ax_25_ports[item].nr_worst_qual }} {{ ax_25_ports[item].nr_verbose }}
+{% endfor %}

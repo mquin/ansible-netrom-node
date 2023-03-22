@@ -1,0 +1,5 @@
+# /etc/ax25/nrports
+# name callsign alias paclen description
+{% for item in nr_ports %}
+{{ nr_ports[item].name }} {{callsign}}-{{ nr_ports[item].suffix }} {{ nr_ports[item].alias }} {{ nr_ports[item].paclen }} {{ nr_ports[item].comment }}
+{% endfor %}

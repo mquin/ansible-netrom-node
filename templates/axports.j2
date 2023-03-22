@@ -1,0 +1,6 @@
+# /etc/ax25/axports
+# name callsign speed paclen window description
+#
+{% for item in ax_25_ports %}
+{{ ax_25_ports[item].name }} {{callsign}}-{{ ax_25_ports[item].suffix }} {{ ax_25_ports[item].port_speed }} {{ ax_25_ports[item].packet_size }} {{ ax_25_ports[item].window_size }} {{ ax_25_ports[item].comment }}
+{% endfor %}

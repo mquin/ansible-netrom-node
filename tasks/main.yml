@@ -1,0 +1,73 @@
+---
+  - name: Install AX.25 packages
+    apt:
+      state: present
+      name:
+        - ax25-tools
+        - ax25-apps
+
+  - name: Ensure netrom is loaded on boot
+    lineinfile:
+      path: /etc/modules
+      line: netrom
+
+  - name: load netrom module
+    modprobe:
+      name: netrom
+      state: present
+  
+  - name: install systemd unit files
+    copy:
+      dest: "/etc/systemd/system/{{item}}"
+      src: "{{item}}"
+    register: unit_files
+    with_items:
+      - kiss-tnc.service
+      - nrattach@.service
+      - netromd.service
+      - nodesave.service
+
+  - name: reload systemd unit files if necessary
+    systemd:
+      daemon_reload: true
+    when: unit_files.changed
+
+  - name: Template AX.25 configuration files
+    template:
+      dest: "/etc/ax25/{{item}}"
+      src: "{{item}}.j2"
+    with_items:
+      - axports
+      - nrports
+      - nrbroadcast
+
+  - name: Enable services
+    systemd:
+      name: "{{item}}" 
+      enabled: true
+    with_items:
+      - kiss-tnc.service
+      - netromd.service
+      - nodesave.service
+
+  - name: Enable netrom ports
+    systemd:
+      name: "nrattach@{{item}}.service"
+      enabled: true
+    with_items: "{{nr_ports}}"
+
+  - name: Start TNC
+    systemd: 
+      name: kiss-tnc.service
+      state: started
+
+  - name: Start netrom ports
+    systemd:
+      name: "nrattach@{{item}}.service"
+      state: started
+    with_items: "{{nr_ports}}"
+
+  - name: Start netromd
+    systemd:
+      name: netromd.service
+      state: started
