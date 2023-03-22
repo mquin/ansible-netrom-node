@@ -1,9 +1,0 @@
-[Unit]
-Description=AX25 KISS TNC
-
-[Service]
-ExecStart=/usr/sbin/kissattach /dev/ttyACM0 tnc
-ExecStop=pkill -f 'kissattach /dev/ttyACM0'
-TimeoutStopSec=5
-[Install]
-WantedBy=multi-user.target
