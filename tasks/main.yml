@@ -5,6 +5,7 @@
       name:
         - ax25-tools
         - ax25-apps
+        - socat
 
   - name: Ensure netrom is loaded on boot
     lineinfile:
@@ -63,6 +64,7 @@
     with_items:
       - netromd.service
       - nodesave.service
+      - ax25ipd.service
 
   - name: Enable netrom ports
     systemd:
@@ -74,6 +76,7 @@
     systemd: 
       name: "kiss-tnc@{{item}}.service"
       state: started
+      enabled: true
     with_items: "{{ax_25_ports}}"
     when: ax_25_ports[item].type == 'kiss'
     register: unit_override_files
@@ -83,6 +86,11 @@
       name: "nrattach@{{item}}.service"
       state: started
     with_items: "{{nr_ports}}"
+
+  - name: Start ax25ipd
+    systemd:
+      name: ax25ipd.service
+      state: started
 
   - name: Start netromd
     systemd:
