@@ -16,7 +16,12 @@
     modprobe:
       name: netrom
       state: present
-  
+
+  - name: Ensure directory for socat ptys exists
+    file:
+      path: /var/ax25/pty
+      state: directory
+
   - name: install systemd unit files
     copy:
       dest: "/etc/systemd/system/{{item}}"
@@ -27,6 +32,8 @@
       - nrattach@.service
       - netromd.service
       - nodesave.service
+      - ax25ipd.service
+      - kiss-socat-axip.service
 
   - name: Create TNC instance configuration directories
     file:
@@ -65,7 +72,13 @@
       - netromd.service
       - nodesave.service
       - ax25ipd.service
-
+      - kiss-socat-axip.service
+ 
+  - name: Start socat virtual serial connection for ax25ipd
+    systemd:
+      name: kiss-socat-axip.service
+      state: started
+ 
   - name: Enable netrom ports
     systemd:
       name: "nrattach@{{item}}.service"
@@ -78,7 +91,7 @@
       state: started
       enabled: true
     with_items: "{{ax_25_ports}}"
-    when: ax_25_ports[item].type == 'kiss'
+    when: ax_25_ports[item].type == 'kiss' or ax_25_ports[item].type == 'axip'
     register: unit_override_files
 
   - name: Start netrom ports
