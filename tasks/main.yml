@@ -54,6 +54,7 @@
       - axports
       - nrports
       - nrbroadcast
+      - ax25ipd.conf
 
   - name: Enable services
     systemd:
