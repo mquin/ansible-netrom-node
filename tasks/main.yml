@@ -17,6 +17,14 @@
     register: unit_files
     with_items:
       - netromd.service
+      - nrattach@.service
+
+  - name: install templated systemd unit files
+    template:
+      dest: "/etc/systemd/system/{{item}}"
+      src: "{{item}}.j2"
+    register: unit_files
+    with_items:
       - nodesave.service
 
   - name: reload systemd unit files if necessary

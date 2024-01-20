@@ -2,7 +2,7 @@
 Description=Persist NET/ROM routing information
 After=network.target
 {% for item in ax_25_ports %}
-After=kiss-tnc{{ ax_25_ports[item].name }}.service
+After=kiss-tnc@{{ ax_25_ports[item].name }}.service
 {% endfor %}
 StartLimitInterval=0
 
